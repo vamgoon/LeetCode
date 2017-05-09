@@ -37,4 +37,3 @@ const extendPalindrome = (s, j, k) => {
     }
 };
 
-console.log(longestPalindrome("cbbd"))
