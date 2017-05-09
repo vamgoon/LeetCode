@@ -1,39 +1,40 @@
 /**
  * Created by vamgoon on 2017/5/8.
  */
+let startIndex = 0;
+let maxLen = 0;
 const longestPalindrome = (s) => {
-    for (let pNum = s.length; pNum > 0; pNum--) {
-        for (let startIndex = 0; startIndex <= s.length - pNum; startIndex++) {
-            let subStr = s.substring(startIndex, startIndex + pNum);
-
-            if (isPS(subStr)) {
-                return subStr;
-            }
-        }
-    }
-};
-
-const isPS = (str) => {
-    let len = str.length;
-    let leftStr;
-    let rightStr;
-    let midIndex;
+    let obj1;
+    let obj2;
+    let len = s.length;
 
     if (len === 1) {
-        return true;
+        return s;
     }
 
-    if (len % 2 === 0) {
-        midIndex = len / 2;
-        leftStr = str.substring(0, midIndex);
-        rightStr = str.substring(midIndex, len);
-    } else {
-        midIndex = (len - 1) / 2;
-        leftStr = str.substring(0, midIndex);
-        rightStr = str.substring(midIndex + 1, len);
+    for (let i = 0; i < len-1; i++) {
+        obj1 = extendPalindrome(s, i, i);
+        obj2 = extendPalindrome(s, i, i+1);
     }
-
-    return leftStr === rightStr.split("").reverse().join("");
+    return obj1.maxLen >= obj2.maxLen
+        ? s.substring(obj1.startIndex, obj1.startIndex + obj1.maxLen)
+        : s.substring(obj2.startIndex, obj2.startIndex + obj2.maxLen);
 };
 
-console.log(longestPalindrome("abcd"))
+const extendPalindrome = (s, j, k) => {
+
+    while (j >= 0 && k < s.length && s.charAt(j) === s.charAt(k)) {
+        j--;
+        k++;
+    }
+    if (maxLen < k - j - 1) {
+        startIndex = j + 1;
+        maxLen = k - j - 1;
+    }
+    return {
+        startIndex,
+        maxLen
+    }
+};
+
+console.log(longestPalindrome("cbbd"))
